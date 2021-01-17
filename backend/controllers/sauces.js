@@ -57,17 +57,16 @@ exports.findSauces = (req, res, next) => {
 }
 
 exports.likeSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id })
+    Sauce.findOne({ _id: req.params.userId })
     .then(sauce => {
-        console.log(req.params);
-        if (sauce.usersDisliked.indexOf(req.params.id) >= 0) {
+        if (sauce.usersDisliked.indexOf(req.params.userId) >= 0) {
             return res.status(400).json({ message: "Impossible d'aimer une sauce qui a été dislike." });
         }
-        if (sauce.usersLiked.indexOf(req.params.id) >= 0) {
-            sauce.usersLiked.splice(sauce.usersLiked.indexOf(req.params.id), 1);
+        if (sauce.usersLiked.indexOf(req.params.userId) >= 0) {
+            sauce.usersLiked.splice(sauce.usersLiked.indexOf(req.params.userId), 1);
             sauce.likes -= 1;
         } else {
-            sauce.usersLiked.push(req.params.id);
+            sauce.usersLiked.push(req.params.userId);
             sauce.likes += 1;
         }
         Sauce.updateOne({ _id: sauce._id }, sauce)
@@ -78,16 +77,16 @@ exports.likeSauce = (req, res, next) => {
 }
 
 exports.dislikeSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id })
+    Sauce.findOne({ _id: req.params.userId })
     .then(sauce => {
-        if (sauce.usersLiked.indexOf(req.params.id) >= 0) {
+        if (sauce.usersLiked.indexOf(req.params.userId) >= 0) {
             return res.status(400).json({ message: "Impossible de dislike une sauce qui a été liké." });
         }
-        if (sauce.usersDisliked.indexOf(req.params.id) >= 0) {
-            sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(req.params.id), 1);
+        if (sauce.usersDisliked.indexOf(req.params.userId) >= 0) {
+            sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(req.params.userId), 1);
             sauce.dislikes -= 1;
         } else {
-            sauce.usersDisliked.push(req.params.id);
+            sauce.usersDisliked.push(req.params.userId);
             sauce.dislikes += 1;
         }
         Sauce.updateOne({ _id: sauce._id }, sauce)
