@@ -133,7 +133,7 @@ export class SaucesService {
   dislikeSauce(id: string, dislike: boolean) {
     return new Promise((resolve, reject) => {
       this.http.post(
-        'http://localhost:3000/api/sauces/' + id + '/like',
+        'http://localhost:3000/api/sauces/' + id + '/dislike',
         {
           userId: this.auth.getUserId(),
           like: dislike ? -1 : 0

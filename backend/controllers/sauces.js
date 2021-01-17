@@ -65,11 +65,9 @@ exports.likeSauce = (req, res, next) => {
         if (sauce.usersLiked.indexOf(req.body.userId) >= 0) {
             sauce.usersLiked.splice(sauce.usersLiked.indexOf(req.body.userId), 1);
             sauce.likes -= 1;
-            console.log(req);
         } else {
             sauce.usersLiked.push(req.body.userId);
             sauce.likes += 1;
-            console.log(req);
         }
         Sauce.updateOne({ _id: sauce._id }, sauce)
         .then(() => res.status(200).json({ message: 'Sauce liké'}))
