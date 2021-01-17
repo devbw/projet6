@@ -1,5 +1,5 @@
 <mat-spinner *ngIf="loading"></mat-spinner>
-<form [formGroup]="signupForm" *ngIf="!loading">
+<form [formGroup]="signupForm" *ngIf="!loading" (ngSubmit)="onSignup()">
   <div class="form-group">
     <label for="email">Email</label>
     <input type="email" class="form-control" id="email" formControlName="email">
@@ -8,6 +8,6 @@
     <label for="password">Password</label>
     <input type="password" class="form-control" id="password" formControlName="password">
   </div>
-  <button mat-raised-button color="primary" [disabled]="signupForm.invalid" (click)="onSignup()">SIGN UP</button>
+  <button mat-raised-button color="primary" [disabled]="signupForm.invalid" type="submit">SIGN UP</button>
   <p class="text-danger" *ngIf="errorMsg">{{ errorMsg }}</p>
 </form>
