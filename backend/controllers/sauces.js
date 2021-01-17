@@ -57,17 +57,19 @@ exports.findSauces = (req, res, next) => {
 }
 
 exports.likeSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.userId })
+    Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
-        if (sauce.usersDisliked.indexOf(req.params.userId) >= 0) {
+        if (sauce.usersDisliked.indexOf(req.body.userId) >= 0) {
             return res.status(400).json({ message: "Impossible d'aimer une sauce qui a été dislike." });
         }
-        if (sauce.usersLiked.indexOf(req.params.userId) >= 0) {
-            sauce.usersLiked.splice(sauce.usersLiked.indexOf(req.params.userId), 1);
+        if (sauce.usersLiked.indexOf(req.body.userId) >= 0) {
+            sauce.usersLiked.splice(sauce.usersLiked.indexOf(req.body.userId), 1);
             sauce.likes -= 1;
+            console.log(req);
         } else {
-            sauce.usersLiked.push(req.params.userId);
+            sauce.usersLiked.push(req.body.userId);
             sauce.likes += 1;
+            console.log(req);
         }
         Sauce.updateOne({ _id: sauce._id }, sauce)
         .then(() => res.status(200).json({ message: 'Sauce liké'}))
@@ -77,16 +79,16 @@ exports.likeSauce = (req, res, next) => {
 }
 
 exports.dislikeSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.userId })
+    Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
-        if (sauce.usersLiked.indexOf(req.params.userId) >= 0) {
+        if (sauce.usersLiked.indexOf(req.body.userId) >= 0) {
             return res.status(400).json({ message: "Impossible de dislike une sauce qui a été liké." });
         }
-        if (sauce.usersDisliked.indexOf(req.params.userId) >= 0) {
-            sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(req.params.userId), 1);
+        if (sauce.usersDisliked.indexOf(req.body.userId) >= 0) {
+            sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(req.body.userId), 1);
             sauce.dislikes -= 1;
         } else {
-            sauce.usersDisliked.push(req.params.userId);
+            sauce.usersDisliked.push(req.body.userId);
             sauce.dislikes += 1;
         }
         Sauce.updateOne({ _id: sauce._id }, sauce)
