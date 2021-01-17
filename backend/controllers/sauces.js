@@ -14,7 +14,6 @@ exports.createSauce = (req, res, next) => {
     sauce.save()
     .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
     .catch(error => {
-        console.log(error);
         return res.status(400).json({error});
     });
 };
@@ -28,7 +27,6 @@ exports.modifySauce = (req, res, next) => {
     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id})
     .then(() => res.status(200).json({ message: 'Objet modifié !'}))
     .catch(error => {
-        console.log(error);
         return res.status(400).json({error});
     });
 }
@@ -61,7 +59,7 @@ exports.findSauces = (req, res, next) => {
 exports.likeSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
-        console.log(sauce);
+        console.log(req.params);
         if (sauce.usersDisliked.indexOf(req.params.id) >= 0) {
             return res.status(400).json({ message: "Impossible d'aimer une sauce qui a été dislike." });
         }
@@ -72,7 +70,9 @@ exports.likeSauce = (req, res, next) => {
             sauce.usersLiked.push(req.params.id);
             sauce.likes += 1;
         }
-        return res.status(201).json({ message: 'Sauce liké' });
+        Sauce.updateOne({ _id: sauce._id }, sauce)
+        .then(() => res.status(200).json({ message: 'Sauce liké'}))
+        .catch(error => res.status(400).json({error}));
     })
     .catch(error => res.status(500).json({ error }));
 }
@@ -90,7 +90,9 @@ exports.dislikeSauce = (req, res, next) => {
             sauce.usersDisliked.push(req.params.id);
             sauce.dislikes += 1;
         }
-        return res.status(201).json({ message: 'Sauce disliké' });
+        Sauce.updateOne({ _id: sauce._id }, sauce)
+        .then(() => res.status(200).json({ message: 'Sauce disliké'}))
+        .catch(error => res.status(400).json({error}));
     })
     .catch(error => res.status(500).json({ error }));
 }
