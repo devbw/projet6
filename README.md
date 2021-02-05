@@ -11,8 +11,10 @@ Dans un terminal faire :
   
 # Démarrer le backend
 Dans un terminal faire :
-
+  
   - cd backend
+
+  - npm install
   
   - node server (ou nodemon server si vous utilisez nodemon)
   
